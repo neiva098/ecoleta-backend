@@ -7,7 +7,8 @@
     "start": "node dist/server.js",
     "build": "tsc",
     "dev": "nodemon --watch src/**/*.ts --exec ts-node src/server.ts",
-    "knex:migrate": "npx knex migrate:latest --knexfile knexfile.ts migrate:latest"
+    "knex:migrate": "knex --knexfile knexfile.ts migrate:latest",
+    "knex:seed": "knex --knexfile knexfile.ts seed:run"
   },
   "repository": {
     "type": "git",
