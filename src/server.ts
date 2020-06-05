@@ -1,5 +1,5 @@
 import app from './app'
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3333
 
-app.listen(PORT, () => { console.log(`Sped EFD Service running on port ${PORT}`) })
+app.listen(PORT, () => { console.log(`Ecoleta running on port ${PORT}`) })
