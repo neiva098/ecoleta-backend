@@ -23,3 +23,12 @@ export const insertPointAndLinkItem = async (point: Point, items: number[]) => {
         id: point_id
     }
 }
+
+export const joinPointItems = async (pointId: string) => {
+    const items = await knex('items')
+        .join('point_items', 'items.id', '=', 'point_items.item_id')
+        .where('point_items.point_id', pointId)
+        .select('items.title')
+
+    return items
+}
