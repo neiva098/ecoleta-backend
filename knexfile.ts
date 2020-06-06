@@ -1,7 +1,6 @@
 import path from 'path'
 
 module.exports = {
-
     development: {
       client: 'sqlite3',
       connection: {
