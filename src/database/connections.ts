@@ -6,7 +6,7 @@ const connection = knex({
     connection: {
         filename: path.join(__dirname, './database.sqlite3'),
     },
-    useNullAsDefault: true
+    useNullAsDefault: true,
 })
 
 export default connection
