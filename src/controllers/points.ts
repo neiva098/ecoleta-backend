@@ -1,5 +1,5 @@
 import { Point } from '../interfaces/point'
-import { insertPointAndLinkItem, joinPointItems } from '../repository/point_item'
+import { insertPointAndLinkItem, joinPointItems, joinPointsItems } from '../repository/point_item'
 import { getPointRepository } from '../repository/point'
 
 export const insertPoint = async (point: Point, items: number[]) => {
@@ -14,4 +14,11 @@ export const getPoint = async (pointId: string) => {
     const items = await joinPointItems(pointId)
 
     return { point, items }
+}
+
+export const getPoints = async (city?: string, uf?: string, items?: string) => {
+    const itemsArray= items?.split(',')
+        .map(item => Number(item.trim()))
+
+    return joinPointsItems(city, uf, itemsArray)
 }

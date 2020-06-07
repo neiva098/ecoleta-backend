@@ -1,6 +1,6 @@
 import express from 'express'
 import { Point } from '../interfaces/point'
-import { insertPoint, getPoint } from '../controllers/points'
+import { insertPoint, getPoint, getPoints } from '../controllers/points'
 
 const routes = express.Router()
 
@@ -11,6 +11,18 @@ routes.get('/:id', async (req, res, next) => {
         const point = await getPoint(id)
 
         return res.json(point)
+    } catch (error) {
+        next({ code: error.statusCode, message: error.message })
+    }
+})
+
+routes.get('/', async (req, res, next) => {
+    try {
+        const { city, uf, items }: any = req.query
+
+        const points = await getPoints(city, uf, items)
+
+        return res.json(points)
     } catch (error) {
         next({ code: error.statusCode, message: error.message })
     }

@@ -1,11 +1,12 @@
 import knex from '../database/connections'
 import { Point } from '../interfaces/point'
 import { insertPointRepository } from './point'
+import { getOptionalConditions } from './general'
 
 export const insertPointAndLinkItem = async (point: Point, items: number[]) => {
-    // const trx = await knex.transaction() not working in my node version
+    const trx = await knex.transaction()
 
-    const insertedIds = await insertPointRepository(point, knex)
+    const insertedIds = await insertPointRepository(point, trx)
 
     const point_id = insertedIds[0]
 
@@ -16,7 +17,9 @@ export const insertPointAndLinkItem = async (point: Point, items: number[]) => {
         }
     })
 
-    const insertPointItem = await knex('point_items').insert(pointItems)
+    const insertPointItem = await trx('point_items').insert(pointItems)
+
+    await trx.commit()
 
     return {
         ...point,
@@ -31,4 +34,27 @@ export const joinPointItems = async (pointId: string) => {
         .select('items.title')
 
     return items
+}
+
+export const joinPointsItems = async (city?: string, uf?: string, items?: number[]) => {
+    const points = await knex('points')
+        .join('point_items', 'points.id', '=', 'point_items.point_id')
+        .where(builder => {
+            const conditions: any = { city, uf, 'point_items.item_id': items }
+
+            for (const prop in conditions) {
+
+                if (conditions[prop] instanceof Array && conditions[prop].length > 0) {
+                    builder.whereIn(prop, conditions[prop])
+                } else {
+                    if (conditions[prop]) {
+                        builder.where(prop, conditions[prop])
+                    }
+                } 
+            }
+        })
+        .distinct()
+        .select('points.*')
+
+    return points
 }
