@@ -1,5 +1,6 @@
 import * as bodyParser from 'body-parser'
 import express from 'express'
+import cors from 'cors'
 
 import routes from './routes'
 
@@ -14,6 +15,7 @@ class App {
     private config(): void {
         require('dotenv').config()
 
+        this.app.use(cors())
         this.app.use(bodyParser.json())
         this.app.use(bodyParser.urlencoded({ extended: false }))
         this.app.use(routes)
